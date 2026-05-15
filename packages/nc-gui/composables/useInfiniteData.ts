@@ -152,6 +152,19 @@ export function useInfiniteData(args: {
 
   const { blockExternalSourceRecordVisibility, showUpgradeToSeeMoreRecordsModal } = useEeConfig()
 
+  // Field agent dirty tracking: rebuild dependency map when columns change
+  const { onFieldAgentCellUpdate, buildFieldAgentDependencyMap } = useNocoAi()
+
+  watch(
+    () => meta.value?.columns,
+    (columns) => {
+      if (columns?.length) {
+        buildFieldAgentDependencyMap(columns as ColumnType[])
+      }
+    },
+    { immediate: true },
+  )
+
   const { getEvaluatedRowMetaRowColorInfo } = disableSmartsheet
     ? {
         getEvaluatedRowMetaRowColorInfo: (_row: any) => ({}),
@@ -1439,6 +1452,11 @@ export function useInfiniteData(args: {
         },
         { typecast: 'true' },
       )
+
+      // Track dirty rows for field agents that depend on this column
+      if (id) {
+        onFieldAgentCellUpdate(property, String(id))
+      }
 
       // Update specific columns based on their types.
       // Only sync back types that can be changed server-side as a side effect
