@@ -32,9 +32,17 @@ export const AIButton = 'AIButton'
 
 export const AIPrompt = 'AIPrompt'
 
+export const AIFieldAgent = 'AIFieldAgent'
+
 export const LongTextAiMetaProp = _LongTextAiMetaProp
 
 const uiTypes: UiTypesType[] = [
+  {
+    name: AIFieldAgent,
+    icon: iconMap.ncAutoAwesome,
+    isNew: 1,
+    deprecated: 0,
+  },
   {
     name: AIButton,
     icon: iconMap.cellAiButton,
@@ -460,6 +468,7 @@ const formViewHiddenColTypes = [
   UITypes.AutoNumber,
   AIButton,
   AIPrompt,
+  AIFieldAgent,
 ]
 
 const isFormViewHiddenCol = (col: ColumnType | UITypes): boolean => {
