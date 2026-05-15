@@ -54,7 +54,7 @@ export interface ConnectionErrorPayload extends BaseSocketPayload {
 
 export interface DataPayload extends BaseSocketPayload {
   id: string;
-  action: 'add' | 'update' | 'delete' | 'reorder';
+  action: 'add' | 'update' | 'delete' | 'reorder' | 'agent_status';
   payload: Record<string, any>;
   before?: string;
 }
