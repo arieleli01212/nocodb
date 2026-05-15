@@ -384,7 +384,12 @@ export function useCanvasRender({
         }
       }
 
-      ctx.fillStyle = getColor(themeV4Colors.gray['500'], themeV4Colors.gray['600'])
+      const isAgentCol = isFieldAgentCol(colObj)
+      const headerColor = isAgentCol
+        ? getColor(themeV4Colors.purple['700'], themeV4Colors.purple['500'])
+        : getColor(themeV4Colors.gray['500'], themeV4Colors.gray['600'])
+
+      ctx.fillStyle = headerColor
 
       const rightPadding = 8
       let iconSpace = rightPadding
@@ -410,7 +415,7 @@ export function useCanvasRender({
         spriteLoader.renderIcon(ctx, {
           icon: column?.virtual ? iconConfig?.icon : iconConfig,
           size: 13,
-          color: iconConfig?.hex ?? getColor(themeV4Colors.gray['500'], themeV4Colors.gray['600']),
+          color: isAgentCol ? headerColor : (iconConfig?.hex ?? getColor(themeV4Colors.gray['500'], themeV4Colors.gray['600'])),
           x: xOffset + 8 - _scrollLeft,
           y: _headerRowHeight / 2 - 7,
         })
@@ -648,7 +653,12 @@ export function useCanvasRender({
           }
         }
 
-        ctx.fillStyle = getColor(themeV4Colors.gray['500'], themeV4Colors.gray['600'])
+        const isAgentCol = isFieldAgentCol(colObj)
+        const headerColor = isAgentCol
+          ? getColor(themeV4Colors.purple['700'], themeV4Colors.purple['500'])
+          : getColor(themeV4Colors.gray['500'], themeV4Colors.gray['600'])
+
+        ctx.fillStyle = headerColor
         const iconConfig = (
           column?.virtual
             ? renderVIcon(column.columnObj, column.relatedColObj)
@@ -658,7 +668,7 @@ export function useCanvasRender({
           spriteLoader.renderIcon(ctx, {
             icon: column?.virtual ? iconConfig?.icon : iconConfig,
             size: 13,
-            color: iconConfig?.hex ?? getColor(themeV4Colors.gray['500'], themeV4Colors.gray['600']),
+            color: isAgentCol ? headerColor : (iconConfig?.hex ?? getColor(themeV4Colors.gray['500'], themeV4Colors.gray['600'])),
             x: xOffset + 8,
             y: _headerRowHeight / 2 - 7,
           })
