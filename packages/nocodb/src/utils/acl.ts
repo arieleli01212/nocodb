@@ -292,6 +292,7 @@ const permissionScopes = {
 
     // Web Bookmark (doc editor)
     'webBookmarkFetch',
+    'webBookmarkResignImage',
 
     // etc
     'fetchViaUrl',
@@ -547,6 +548,7 @@ const rolePermissions:
       // etc
       fetchViaUrl: true,
       webBookmarkFetch: true,
+      webBookmarkResignImage: true,
 
       // Sort/Filter/ViewColumn/View operations for personal views (middleware handles ownership check)
       sortCreate: true,
@@ -1013,6 +1015,7 @@ const permissionDescriptions: Record<string, string> = {
   dataImportFile: 'import file into a table',
 
   webBookmarkFetch: 'fetch link metadata for a doc bookmark block',
+  webBookmarkResignImage: 'refresh signed URL for a stored bookmark image',
 
   bookmarkList: 'view list of bookmarks',
   bookmarkCheck: 'check bookmark status of items',
