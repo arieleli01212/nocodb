@@ -282,6 +282,42 @@ export class ViewsService {
       }
     }
 
+    let autoShareView = false;
+
+    if (param.view.allow_sync !== undefined) {
+      if (oldView.type !== ViewTypes.GRID) {
+        NcError.get(context).badRequest(
+          'Allow sync can only be enabled on grid views',
+        );
+      }
+      if (
+        oldView.lock_type === ViewLockType.Personal &&
+        oldView.owned_by &&
+        oldView.owned_by !== user?.id
+      ) {
+        NcError.get(context).forbidden(
+          'Only the view owner can change allow sync on a personal view',
+        );
+      }
+
+      if (param.view.allow_sync) {
+        const model = await Model.get(
+          context,
+          oldView.fk_model_id,
+          false,
+          ncMeta,
+        );
+        if (model?.synced) {
+          NcError.get(context).badRequest(
+            'Allow sync cannot be enabled on a synced table',
+          );
+        }
+        if (!oldView.uuid) {
+          autoShareView = true;
+        }
+      }
+    }
+
     let ownedBy = oldView.owned_by;
     let createdBy = oldView.created_by;
     let includeCreatedByAndUpdateBy = false;
@@ -390,6 +426,17 @@ export class ViewsService {
       includeCreatedByAndUpdateBy,
       ncMeta,
     );
+
+    if (autoShareView) {
+      await View.share(context, param.viewId, ncMeta);
+      const sharedView = await View.get(context, param.viewId, false, ncMeta);
+      this.appHooksService.emit(AppEvents.SHARED_VIEW_CREATE, {
+        user: param.req.user,
+        view: (sharedView ?? { ...oldView, allow_sync: true }) as ViewType,
+        req: param.req,
+        context,
+      });
+    }
 
     let owner = param.req.user;
 
@@ -670,6 +717,10 @@ export class ViewsService {
     }
 
     await View.sharedViewDelete(context, param.viewId);
+
+    if (view.allow_sync) {
+      await View.update(context, param.viewId, { allow_sync: false }, false);
+    }
 
     this.appHooksService.emit(AppEvents.SHARED_VIEW_DELETE, {
       user: param.user,
