@@ -801,6 +801,7 @@ export class TablesService {
       user: User | UserType;
       req: NcRequest;
       synced?: boolean;
+      mm?: boolean;
       apiVersion?: NcApiVersion;
       isDuplicateOperation?: boolean;
       operationSource?: OperationSource;
@@ -831,6 +832,7 @@ export class TablesService {
     } = {
       ...param.table,
       ...(param.synced ? { synced: true } : {}),
+      ...(param.mm ? { mm: true } : {}),
     };
 
     if (context.schema_locked) {
