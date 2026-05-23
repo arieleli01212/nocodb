@@ -393,7 +393,7 @@ watch(
         <SmartsheetTopbarManagedAppStatus />
         <SmartsheetTopbarSandboxStatus />
         <LazySmartsheetTopbarHistory />
-        <LazyGeneralShareProject v-if="!props.tab" />
+        <LazyShareIndexBaseTrigger v-if="!props.tab" />
       </div>
     </div>
     <div

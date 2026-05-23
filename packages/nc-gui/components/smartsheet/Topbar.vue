@@ -13,6 +13,8 @@ const { activeWorkflowId, activeWorkflowHasDraftChanges } = storeToRefs(useWorkf
 
 const isPublic = inject(IsPublicInj, ref(false))
 
+const { isForm, isTimeline } = useSmartsheetStore()
+
 const { isMobileMode } = storeToRefs(useConfigStore())
 
 const { appInfo } = useGlobal()
@@ -161,7 +163,13 @@ const topbarBreadcrumbItemWidth = computed(() => {
 
         <DashboardMiniSidebarTheme v-if="isSharedBase" placement="bottom" render-as-btn button-class="h-8 w-8" />
 
-        <LazySmartsheetTopbarShareProject v-if="!activeScriptId && !activeWorkflowId" />
+        <LazyShareIndexTrigger v-if="!isPublic && !isMobileMode && !isSharedBase && (isForm || isTimeline)" />
+
+        <LazyShareIndexDashboardTrigger v-if="!isPublic && !isMobileMode && !isSharedBase && activeDashboardId" />
+
+        <LazyShareIndexBaseTrigger
+          v-if="!isPublic && !isMobileMode && !activeScriptId && !activeWorkflowId && !activeDashboardId"
+        />
 
         <div v-if="isSharedBase">
           <LazyGeneralLanguage
