@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { EventType, MetaEventType, SqlUiFactory } from 'nocodb-sdk';
 import type { NcContext, UITypes } from 'nocodb-sdk';
 import type {
@@ -32,7 +32,10 @@ export class ColumnUpdateFilterOperatorDependencyHandler
 
   triggerMetaEvents: MetaEventType[] = [MetaEventType.COLUMN_UPDATED];
 
-  constructor(private readonly filtersService: FiltersService) {}
+  constructor(
+    @Inject(forwardRef(() => FiltersService))
+    private readonly filtersService: FiltersService,
+  ) {}
 
   async getAffectedDependency(
     _context: NcContext,
