@@ -2804,6 +2804,7 @@
     "restrictAccessWithPassword": "Restrict access with password",
     "manageProjectAccess": "Manage Base Access",
     "allowDownload": "Allow Download",
+    "allowSync": "Allow sync",
     "surveyMode": "Survey Mode",
     "rtlOrientation": "RTL Orientation",
     "useTheme": "Use Theme",
@@ -3053,6 +3054,7 @@
     "goBackHome": "Go back home"
   },
   "tooltip": {
+    "allowSyncDescription": "Let other bases sync data from this view",
     "enableAllowSyncOnView": "Enable \"Allow sync\" on this view first",
     "fillRequiredFields": "Fill required fields to continue",
     "showExtensions": "Show extensions",

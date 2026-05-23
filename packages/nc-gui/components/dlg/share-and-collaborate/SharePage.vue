@@ -27,6 +27,7 @@ const isUpdating = ref({
   download: false,
   customUrl: false,
   language: false,
+  allowSync: false,
 })
 
 const activeView = computed<(ViewType & { meta: object & Record<string, any> }) | undefined>({
@@ -459,6 +460,24 @@ const toggleShare = async () => {
   }
 }
 
+const allowSync = computed(() => !!(activeView.value as any)?.allow_sync)
+
+const toggleAllowSync = async () => {
+  if (!activeView.value?.id) return
+  if (isUpdating.value.allowSync) return
+
+  const next = !allowSync.value
+  isUpdating.value.allowSync = true
+  try {
+    await viewStore.updateView(activeView.value.id, { allow_sync: next } as any)
+    $e(`a:view:share:${next ? 'enable' : 'disable'}-allow-sync`)
+  } catch (e: any) {
+    message.error(await extractSdkResponseErrorMsg(e))
+  } finally {
+    isUpdating.value.allowSync = false
+  }
+}
+
 async function saveAllowCSVDownload() {
   isUpdating.value.download = true
   try {
@@ -677,6 +696,31 @@ const copyCustomUrl = async (custUrl = '') => {
               data-testid="share-download-toggle"
               size="small"
               :disabled="isReadOnly"
+            />
+          </div>
+        </div>
+
+        <div
+          v-if="showEEFeatures && activeView?.type === ViewTypes.GRID"
+          class="flex flex-col justify-between gap-y-3 mt-1 py-2 px-3 bg-nc-bg-gray-extralight rounded-md"
+        >
+          <div class="flex flex-row items-center justify-between">
+            <div class="text-nc-content-gray-extreme flex items-center space-x-1">
+              <div>{{ $t('activity.allowSync') }}</div>
+              <NcTooltip class="flex items-center">
+                <template #title>{{ $t('tooltip.allowSyncDescription') }}</template>
+                <GeneralIcon icon="info" class="flex-none text-gray-400 cursor-pointer" />
+              </NcTooltip>
+            </div>
+            <a-switch
+              v-e="['c:share:view:allow-sync:toggle']"
+              :checked="allowSync"
+              :loading="isUpdating.allowSync"
+              class="share-allow-sync-toggle !mt-0.25"
+              data-testid="share-allow-sync-toggle"
+              size="small"
+              :disabled="isReadOnly"
+              @click="toggleAllowSync"
             />
           </div>
         </div>

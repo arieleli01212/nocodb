@@ -1311,6 +1311,7 @@ export const iconMap = {
   'refresh': NcRefresh,
   'chevronUpDown': NcChevronUpDown,
   'play': NcPlay,
+  'pause': NcPauseIcon,
   'googleDocs': GoogleDocs,
   'pdfFile': MdiPdf,
   'globe': NcGlobe,
