@@ -25,6 +25,7 @@ export class MetaDependencyEventHandler {
     FILTER_CREATED: [],
     FILTER_UPDATED: [],
     FILTER_DELETED: [],
+    VIEW_UPDATED: [],
   };
 
   registerEvents(metaEventHandler: MetaEventHandler[]) {

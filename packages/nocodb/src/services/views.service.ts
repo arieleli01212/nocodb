@@ -4,6 +4,7 @@ import {
   EventType,
   extractRolesObj,
   getFirstNonPersonalView,
+  MetaEventType,
   ProjectRoles,
   ViewLockType,
   ViewTypes,
@@ -30,6 +31,7 @@ import {
 } from '~/models';
 import Noco from '~/Noco';
 import { AppHooksService } from '~/services/app-hooks/app-hooks.service';
+import { MetaDependencyEventHandler } from '~/services/meta-dependency/event-handler.service';
 import NocoSocket from '~/socket/NocoSocket';
 import {
   type ViewWebhookManager,
@@ -98,7 +100,10 @@ async function xcVisibilityMetaGet(
 
 @Injectable()
 export class ViewsService {
-  constructor(protected appHooksService: AppHooksService) {}
+  constructor(
+    protected appHooksService: AppHooksService,
+    protected readonly metaDependencyEventHandler: MetaDependencyEventHandler,
+  ) {}
 
   async viewList(
     context: NcContext,
@@ -467,6 +472,16 @@ export class ViewsService {
       owner,
     });
 
+    await this.metaDependencyEventHandler.handleEvent(
+      context,
+      {
+        eventType: MetaEventType.VIEW_UPDATED,
+        oldEntity: oldViewForEvent,
+        newEntity: viewForEvent,
+      },
+      ncMeta,
+    );
+
     await result.getView(context, ncMeta);
 
     // Strip the stored bcrypt password hash from every outbound payload.
@@ -699,6 +714,12 @@ export class ViewsService {
       context,
     });
 
+    await this.metaDependencyEventHandler.handleEvent(context, {
+      eventType: MetaEventType.VIEW_UPDATED,
+      oldEntity: View.maskPasswordForResponse(view),
+      newEntity: View.maskPasswordForResponse(result),
+    });
+
     return View.maskPasswordForResponse(result);
   }
 
@@ -727,6 +748,16 @@ export class ViewsService {
       view,
       req: param.req,
       context,
+    });
+
+    await this.metaDependencyEventHandler.handleEvent(context, {
+      eventType: MetaEventType.VIEW_UPDATED,
+      oldEntity: View.maskPasswordForResponse(view),
+      newEntity: View.maskPasswordForResponse({
+        ...view,
+        uuid: null,
+        allow_sync: false,
+      }),
     });
 
     return true;

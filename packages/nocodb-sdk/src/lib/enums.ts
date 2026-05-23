@@ -735,6 +735,7 @@ export enum MetaEventType {
   FILTER_CREATED = 'FILTER_CREATED',
   FILTER_UPDATED = 'FILTER_UPDATED',
   FILTER_DELETED = 'FILTER_DELETED',
+  VIEW_UPDATED = 'VIEW_UPDATED',
 }
 
 export enum MetaEntityType {
