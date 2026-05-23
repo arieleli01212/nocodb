@@ -40,6 +40,7 @@ export class DataTableService {
       ignorePagination?: boolean;
       apiVersion?: NcApiVersion;
       includeSortAndFilterColumns?: boolean;
+      getHiddenColumns?: boolean;
       user?: any;
     },
   ) {
@@ -56,6 +57,7 @@ export class DataTableService {
       view,
       apiVersion: param.apiVersion,
       includeSortAndFilterColumns: param?.includeSortAndFilterColumns,
+      getHiddenColumns: param?.getHiddenColumns,
     });
   }
 

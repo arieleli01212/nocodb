@@ -237,6 +237,7 @@ export enum AppEvents {
   INTEGRATION_UPDATE = 'integration.update',
 
   ROW_USER_MENTION = 'row.user.mention',
+  ROW_LMT_TOUCHED = 'row.lmt.touched',
   CALENDAR_CREATE = 'calendar.create',
   TIMELINE_CREATE = 'timeline.create',
   FORM_DUPLICATE = 'form.duplicate',

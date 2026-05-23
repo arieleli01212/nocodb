@@ -118,6 +118,7 @@ export class BulkDataAliasService {
       query: any;
       internalFlags?: {
         skipHooks?: boolean;
+        allowSystemColumn?: boolean;
       };
     },
   ) {
@@ -127,7 +128,11 @@ export class BulkDataAliasService {
       options: [
         param.query,
         param.body,
-        { cookie: param.cookie, skip_hooks: param.internalFlags?.skipHooks },
+        {
+          cookie: param.cookie,
+          skip_hooks: param.internalFlags?.skipHooks,
+          allowSystemColumn: param.internalFlags?.allowSystemColumn,
+        },
       ],
     });
   }

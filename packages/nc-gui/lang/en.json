@@ -1416,7 +1416,6 @@
     "resolve": "Resolve",
     "resolvedSource": "Resolved source",
     "fieldTypeNotSyncable": "Field type not syncable",
-    "linkExcludedSyncedAsText": "Excluded — synced as comma-separated text",
     "linkNoViewAutoPickInfo": "Without a shared view picked, this link syncs as comma-separated text",
     "noFieldsAvailableToSelect": "No fields available to select",
     "primaryFieldAlwaysSync": "Primary field is always synced",

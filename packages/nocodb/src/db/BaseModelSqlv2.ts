@@ -9,6 +9,7 @@ import utc from 'dayjs/plugin/utc.js';
 import equal from 'fast-deep-equal';
 import groupBy from 'lodash/groupBy';
 import {
+  AppEvents,
   AuditOperationSubTypes,
   AuditV1OperationTypes,
   ClientType,
@@ -4596,7 +4597,15 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
       includeSoftDeleted?: boolean;
     } = {},
     data,
-    { cookie, skip_hooks = false }: { cookie: NcRequest; skip_hooks?: boolean },
+    {
+      cookie,
+      skip_hooks = false,
+      allowSystemColumn = false,
+    }: {
+      cookie: NcRequest;
+      skip_hooks?: boolean;
+      allowSystemColumn?: boolean;
+    },
   ) {
     try {
       let count = 0;
@@ -4611,7 +4620,7 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
         columns,
       );
       if (!args.skipValidationAndHooks)
-        await this.validate(updateData, columns);
+        await this.validate(updateData, columns, { allowSystemColumn });
 
       // if attachment provided error out
       for (const col of columns) {
@@ -8501,6 +8510,17 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
     }
 
     await this.execAndParse(qb, null, { raw: true });
+    const normalizedRowIds = (Array.isArray(rowIds) ? rowIds : [rowIds])
+      .filter((id) => id != null && id !== '')
+      .map((id) => String(id));
+    if (normalizedRowIds.length) {
+      Noco.eventEmitter.emit(AppEvents.ROW_LMT_TOUCHED, {
+        context: { ...this.context, cache: false, cacheMap: undefined },
+        modelId: model.id,
+        rowIds: normalizedRowIds,
+        user: cookie?.user,
+      });
+    }
   }
 
   findIntermediateOrder(before: BigNumber, after: BigNumber): BigNumber {
@@ -8683,6 +8703,7 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
       ncOrder?: BigNumber;
       before?: string;
       undo?: boolean;
+      allowSystemColumn?: boolean;
     },
   ): Promise<void> {
     const runAfterForLoop = [];
@@ -8781,14 +8802,21 @@ class BaseModelSqlv2 implements IBaseModelSqlV2 {
           } else if (column.uidt === UITypes.CreatedBy) {
             data[column.column_name] = cookie?.user?.id;
           } else if (column.uidt === UITypes.Order && !extra?.undo) {
-            if (extra?.before) {
-              data[column.column_name] = (
-                await this.getUniqueOrdersBeforeItem(extra?.before, 1)
-              )[0].toString();
-            } else {
-              data[column.column_name] = (
-                extra?.ncOrder ?? (await this.getHighestOrderInTable())
-              ).toString();
+            const presetOrder = data[column.column_name];
+            const respectPreset =
+              extra?.allowSystemColumn &&
+              presetOrder != null &&
+              presetOrder !== '';
+            if (!respectPreset) {
+              if (extra?.before) {
+                data[column.column_name] = (
+                  await this.getUniqueOrdersBeforeItem(extra?.before, 1)
+                )[0].toString();
+              } else {
+                data[column.column_name] = (
+                  extra?.ncOrder ?? (await this.getHighestOrderInTable())
+                ).toString();
+              }
             }
           }
         }
