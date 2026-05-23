@@ -139,6 +139,8 @@ export class MetaService {
       [MetaTable.COL_BUTTON]: 'btn',
       [MetaTable.SNAPSHOT]: 'snap',
       [MetaTable.SYNC_CONFIGS]: 'sync',
+      [MetaTable.TABLE_SYNCS]: 'tss',
+      [MetaTable.TABLE_SYNC_MAPPINGS]: 'tsm',
       [MetaTable.PERMISSIONS]: 'perm',
       [MetaTable.PERMISSION_SUBJECTS]: 'pers',
       [MetaTable.DASHBOARDS]: 'dash',

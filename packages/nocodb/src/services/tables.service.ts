@@ -620,7 +620,12 @@ export class TablesService {
       }
     }
 
-    if (isServiceUser(param.user, ServiceUserType.WORKFLOW_USER)) {
+    if (
+      isServiceUser(param.user, [
+        ServiceUserType.WORKFLOW_USER,
+        ServiceUserType.SYNC_USER,
+      ])
+    ) {
       await table.getViews(context);
       // Mask the bcrypt password hash before returning to the caller.
       if (table.views?.length) {

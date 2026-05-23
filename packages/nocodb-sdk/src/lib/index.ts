@@ -35,6 +35,7 @@ export {
   isVirtualCol,
   isLinksOrLTAR,
   isLTARType,
+  isCustomLink,
   isLinkV2,
   isMMOrMMLike,
   isBtLikeV2Junction,

@@ -305,6 +305,13 @@ export enum AppEvents {
   DASHBOARD_DUPLICATE_COMPLETE = 'dashboard.duplicate.complete',
   DASHBOARD_DUPLICATE_FAIL = 'dashboard.duplicate.fail',
 
+  TABLE_SYNC_CREATE = 'tableSync.create',
+  TABLE_SYNC_UPDATE = 'tableSync.update',
+  TABLE_SYNC_DELETE = 'tableSync.delete',
+  TABLE_SYNC_FREEZE = 'tableSync.freeze',
+  TABLE_SYNC_RESUME = 'tableSync.resume',
+  TABLE_SYNC_RESYNC = 'tableSync.resync',
+
   WIDGET_CREATE = 'widget.create',
   WIDGET_UPDATE = 'widget.update',
   WIDGET_DELETE = 'widget.delete',
@@ -724,6 +731,9 @@ export enum MetaEventType {
   COLUMN_UPDATED = 'COLUMN_UPDATED',
   COLUMN_DELETED = 'COLUMN_DELETED',
   HOOK_DELETED = 'HOOK_DELETED',
+  FILTER_CREATED = 'FILTER_CREATED',
+  FILTER_UPDATED = 'FILTER_UPDATED',
+  FILTER_DELETED = 'FILTER_DELETED',
 }
 
 export enum MetaEntityType {
