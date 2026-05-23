@@ -241,6 +241,8 @@
     "upgradeToUseBaseVariablesSubtitle": "Upgrade to the {plan} plan to define reusable variables scoped to a base.",
     "upgradeToUseSync": "Upgrade to use sync",
     "upgradeToUseSyncSubtitle": "Upgrade to the {plan} plan to sync data with internal or external sources.",
+    "upgradeToUseTableSync": "Upgrade to use table sync",
+    "upgradeToUseTableSyncSubtitle": "Upgrade to the {plan} plan to sync data in real-time between tables.",
     "upgradeToEnableUnique": "Upgrade to enable unique",
     "upgradeToEnableUniqueSubtitle": "Upgrade to the {plan} plan to enable unique constraint.",
     "upgradeToUseTimelineView": "Upgrade to use timeline view",
